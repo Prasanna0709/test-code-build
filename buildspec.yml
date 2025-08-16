@@ -1,56 +1,95 @@
+# env:
+#  variables:
+#   CONTAINER_NAME: "my-hello-app"
+#   IMAGE_TAG: "latest"
+
+# phases:
+#  pre_build:
+#   commands:
+#    - echo Pre Build stage started ...
+#    - echo logging in to the ECR repository ...
+
+#    # Account ID eduthukkara command
+#    - AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+
+#    # AWS Current region edukura command
+#    - AWS_CURRENT_REGION=$(aws configure get region)
+
+#    - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_CURRENT_REGION.amazonaws.com/$CONTAINER_NAME
+
+#    # AWS ECR login
+#    - aws ecr get-login-password --region $AWS_CURRENT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_CURRENT_REGION.amazonaws.com
+
+#    - echo logged in successful !
+
+#   build:
+#    commands:
+#     - echo build phase started ...
+
+#     # Docker build in the local system
+#     - docker build -t $CONTAINER_NAME .
+
+#     # Docker tag it creates a image with the tag we give in the second image repo uri:latest
+#     - docker tag $CONTAINER_NAME:latest $REPOSITORY_URI:$IMAGE_TAG
+
+#     # Second docker image with the build number imagerepouri:buildnumber example 1 12 etc ...
+#     #- docker tag $CONTAINER_NAME:latest $REPOSITORY_URI:$CODEBUILD_BUILD_NUMBER
+
+#   post_build:
+#    commands:
+#     - echo Pushing the Docker image...
+
+#     # Pushing the first image to the ECR repo example repouri:latest image
+#     - docker push $REPOSITORY_URI:$IMAGE_TAG
+
+#     # Pushing the second image to the ECR repo example repouri:12
+#     - docker push $REPOSITORY_URI:$CODEBUILD_BUILD_NUMBER
+
+#     - echo Images are pushed to ECR repo !
+
+#     - echo creating the artifact file for deployment use ...
+
+#     - printf '[{"name":"%s","imageUri":"%s"}]' "$CONTAINER_NAME" "$REPOSITORY_URI:$CODEBUILD_BUILD_NUMBER" > imagedefinitions.json
+
+# artifacts:
+#  files:
+#   - imagedefinitions.json
+
+
+version: 0.2
+
 env:
- variables:
-  CONTAINER_NAME: "my-hello-app"
-  IMAGE_TAG: "latest"
+  variables:
+    CONTAINER_NAME: "my-hello-app"
+    IMAGE_TAG: "latest"
 
 phases:
- pre_build:
-  commands:
-   - echo Pre Build stage started ...
-   - echo logging in to the ECR repository ...
-
-   # Account ID eduthukkara command
-   - AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
-
-   # AWS Current region edukura command
-   - AWS_CURRENT_REGION=$(aws configure get region)
-
-   - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_CURRENT_REGION.amazonaws.com/$CONTAINER_NAME
-
-   # AWS ECR login
-   - aws ecr get-login-password --region $AWS_CURRENT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_CURRENT_REGION.amazonaws.com
-
-   - echo logged in successful !
+  pre_build:
+    commands:
+      - echo Pre Build stage started ...
+      - echo logging in to the ECR repository ...
+      - AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+      - AWS_CURRENT_REGION=$(aws configure get region)
+      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_CURRENT_REGION.amazonaws.com/$CONTAINER_NAME
+      - aws ecr get-login-password --region $AWS_CURRENT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_CURRENT_REGION.amazonaws.com
+      - echo logged in successful !
 
   build:
-   commands:
-    - echo build phase started ...
-
-    # Docker build in the local system
-    - docker build -t $CONTAINER_NAME .
-
-    # Docker tag it creates a image with the tag we give in the second image repo uri:latest
-    - docker tag $CONTAINER_NAME:latest $REPOSITORY_URI:$IMAGE_TAG
-
-    # Second docker image with the build number imagerepouri:buildnumber example 1 12 etc ...
-    #- docker tag $CONTAINER_NAME:latest $REPOSITORY_URI:$CODEBUILD_BUILD_NUMBER
+    commands:
+      - echo build phase started ...
+      - docker build -t $CONTAINER_NAME .
+      - docker tag $CONTAINER_NAME:latest $REPOSITORY_URI:$IMAGE_TAG
+      - docker tag $CONTAINER_NAME:latest $REPOSITORY_URI:$CODEBUILD_BUILD_NUMBER
 
   post_build:
-   commands:
-    - echo Pushing the Docker image...
-
-    # Pushing the first image to the ECR repo example repouri:latest image
-    - docker push $REPOSITORY_URI:$IMAGE_TAG
-
-    # Pushing the second image to the ECR repo example repouri:12
-    - docker push $REPOSITORY_URI:$CODEBUILD_BUILD_NUMBER
-
-    - echo Images are pushed to ECR repo !
-
-    - echo creating the artifact file for deployment use ...
-
-    - printf '[{"name":"%s","imageUri":"%s"}]' "$CONTAINER_NAME" "$REPOSITORY_URI:$CODEBUILD_BUILD_NUMBER" > imagedefinitions.json
+    commands:
+      - echo Pushing the Docker image...
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - docker push $REPOSITORY_URI:$CODEBUILD_BUILD_NUMBER
+      - echo Images are pushed to ECR repo !
+      - echo creating the artifact file for deployment use ...
+      - printf '[{"name":"%s","imageUri":"%s"}]' "$CONTAINER_NAME" "$REPOSITORY_URI:$CODEBUILD_BUILD_NUMBER" > imagedefinitions.json
 
 artifacts:
- files:
-  - imagedefinitions.json
+  files:
+    - imagedefinitions.json
