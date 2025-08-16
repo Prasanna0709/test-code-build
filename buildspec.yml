@@ -62,6 +62,7 @@ env:
   variables:
     CONTAINER_NAME: "my-hello-app"
     IMAGE_TAG: "latest"
+    AWS_CURRENT_REGION: "us-east-1"
 
 phases:
   pre_build:
@@ -69,7 +70,6 @@ phases:
       - echo Pre Build stage started ...
       - echo logging in to the ECR repository ...
       - AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
-      - AWS_CURRENT_REGION=$(aws configure get region)
       - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_CURRENT_REGION.amazonaws.com/$CONTAINER_NAME
       - aws ecr get-login-password --region $AWS_CURRENT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_CURRENT_REGION.amazonaws.com
       - echo logged in successful !
