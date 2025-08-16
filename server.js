@@ -8,3 +8,5 @@ app.get("/hello",(req,res)=>{
 app.listen(3000,()=>{
     console.log("Server is listening on port 3000 !");
 })
+
+//codebuild-my-new-codebuild-1-service-role
