@@ -61,7 +61,6 @@ version: 0.2
 env:
   variables:
     CONTAINER_NAME: "my-demo-app"
-    IMAGE_TAG: "latest"
     AWS_CURRENT_REGION: "us-east-1"
 
 phases:
@@ -86,7 +85,7 @@ phases:
       - docker push $REPOSITORY_URI:$CODEBUILD_BUILD_NUMBER
       - echo Images are pushed to ECR repo !
       - echo creating the artifact file for deployment use ...
-      - printf '[{"name":"%s","imageUri":"%s"}]' "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_CURRENT_REGION.amazonaws.com/$CONTAINER_NAME:$CODEBUILD_BUILD_NUMBER" "$REPOSITORY_URI:$IMAGE_TAG" > imagedefinitions.json
+      - printf '[{"name":"%s","imageUri":"%s"}]' "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_CURRENT_REGION.amazonaws.com/$CONTAINER_NAME:$CODEBUILD_BUILD_NUMBER" "$REPOSITORY_URI:$CODEBUILD_BUILD_NUMBER" > imagedefinitions.json
 
 artifacts:
   files:
