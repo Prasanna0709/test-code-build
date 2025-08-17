@@ -60,7 +60,7 @@ version: 0.2
 
 env:
   variables:
-    CONTAINER_NAME: "my-hello-app"
+    CONTAINER_NAME: "my-demo-app"
     IMAGE_TAG: "latest"
     AWS_CURRENT_REGION: "us-east-1"
 
