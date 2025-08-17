@@ -60,7 +60,7 @@ version: 0.2
 
 env:
   variables:
-    CONTAINER_NAME: "my-demo-app"
+    CONTAINER_NAME: "my-nodejs-app"
     AWS_CURRENT_REGION: "us-east-1"
 
 phases:
@@ -76,7 +76,7 @@ phases:
   build:
     commands:
       - echo build phase started ...
-      - docker build -t $CONTAINER_NAME .
+      - docker build -t $CONTAINER_NAME:latest .
       - docker tag $CONTAINER_NAME:latest $REPOSITORY_URI:$CODEBUILD_BUILD_NUMBER
 
   post_build:
