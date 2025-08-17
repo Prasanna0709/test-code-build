@@ -78,14 +78,12 @@ phases:
     commands:
       - echo build phase started ...
       - docker build -t $CONTAINER_NAME .
-      - docker tag $CONTAINER_NAME:latest $REPOSITORY_URI:$IMAGE_TAG
       - docker tag $CONTAINER_NAME:latest $REPOSITORY_URI:$CODEBUILD_BUILD_NUMBER
 
   post_build:
     commands:
       - echo Pushing the Docker image...
       - docker push $REPOSITORY_URI:$CODEBUILD_BUILD_NUMBER
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo Images are pushed to ECR repo !
       - echo creating the artifact file for deployment use ...
       - printf '[{"name":"%s","imageUri":"%s"}]' "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_CURRENT_REGION.amazonaws.com/$CONTAINER_NAME:$CODEBUILD_BUILD_NUMBER" "$REPOSITORY_URI:$IMAGE_TAG" > imagedefinitions.json
