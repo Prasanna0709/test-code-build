@@ -60,7 +60,7 @@ version: 0.2
 
 env:
   variables:
-    CONTAINER_NAME: "my-nodejs-app"
+    CONTAINER_NAME: "my-nodejs-be"
     AWS_CURRENT_REGION: "us-east-1"
 
 phases:
