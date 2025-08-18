@@ -9,6 +9,10 @@ app.get("/test",(req,res)=>{
     return res.send("Hi I'am from the new test API !");
 })
 
+app.get("/test2",(req,res)=>{
+    return res.send("Hi I'am from the new test API 2 ....!");
+})
+
 app.listen(3000,()=>{
     console.log("Server is listening on port 3000 !");
 })
@@ -17,3 +21,4 @@ app.listen(3000,()=>{
 //AWSCodePipelineServiceRole-us-east-1-my-new-pip-1
 
 // codebuild-my-nodejs-be-ecs-codebuild-service-role
+arn:aws:elasticloadbalancing:us-east-1:076542168620:targetgroup/my-nodejsbe-tg/d11c683cc4452cd6
