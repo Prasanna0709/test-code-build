@@ -21,4 +21,4 @@ app.listen(3000,()=>{
 //AWSCodePipelineServiceRole-us-east-1-my-new-pip-1
 
 // codebuild-my-nodejs-be-ecs-codebuild-service-role
-arn:aws:elasticloadbalancing:us-east-1:076542168620:targetgroup/my-nodejsbe-tg/d11c683cc4452cd6
+//:aws:elasticloadbalancing:us-east-1:076542168620:targetgroup/my-nodejsbe-tg/d11c683cc4452cd6
